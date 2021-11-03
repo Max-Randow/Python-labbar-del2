@@ -29,30 +29,59 @@ def exec_statements(statements):
         exec_statement(statement)
     
 
-def exec_statement(statement):
-    #Kolla vilken typ av statement det är och kalla sedan eval_condition för att i t.ex selection kolla om det blir sant eller falskt
-    print("Statement!")
+def eval_condition(expression) -> bool:
 
-def eval_condition(expression):
-    if(calc.is_condition(expression)):
-        #Vi vet att det är ett condition, dvs att operatorn är en condoper
-        left = calc.condition_left(expression)
-        right = calc.condition_right(expression)
-        operator = calc.condition_operator(expression)
-        
-        if(operator == "<"):
-            return left < right
-        elif(operator == ">"):
-            return left > right
-        else:
-            return left == right
-        
-    #Annars kasta error
+    #Vi vet att det är ett condition, dvs att operatorn är en condoper, det kommer alltså alltid att returneras något
+    left = calc.condition_left(expression)
+    right = calc.condition_right(expression)
+    operator = calc.condition_operator(expression)
+    
+    if(operator == "<"):
+        return left < right
+
+    if(operator == ">"):
+        return left > right
+
+    else:
+        return left == right
 
 def eval_binary(expression):
     #Samma sak som i condition...
     pass
 
+
+def exec_statement(statement):
+    #Kolla vilken typ av statement det är och kalla sedan eval_condition för att i t.ex selection kolla om det blir sant eller falskt
+    print("Statement!")
+
+    #Göra match här istället så det ser finare ut? Korta ner kod i efterhand.
+    if(calc.is_selection(statement)):
+        condition = calc.selection_condition(statement)
+
+        if(calc.is_condition(condition)):
+            evaluation = eval_condition(condition)
+
+            if(evaluation):
+                #Do true branch
+                pass
+            else:
+                #Do false branch
+                pass
+                
+        else:
+            pass
+
+    elif(calc.calc.is_assignment(statement)):
+        pass
+    
+    elif(calc.is_repetition(statement)):
+        pass
+    
+    elif(calc.is_output(statement)):
+        pass
+    
+    elif(calc.is_input(statement)):
+        pass
 
 
 exec_program(['calc', ['if', [3, '>', 5], ['print', 2], ['print', 4]]])
