@@ -28,15 +28,11 @@ def eval_condition(expression : list, variables : dict) -> bool:
     #Vi vet att det är ett condition, dvs att operatorn är en condoper, det kommer alltså alltid att returneras något av följande
     left = calc.condition_left(expression)
 
-    #Kolla om left är ett binary expression?
-    if(calc.is_binaryexpr(left)):
-        left = eval_binary(left,variables)
+    left = eval_expression(left)
 
     right = calc.condition_right(expression)
 
-    #Kolla om right är ett binary expression?
-    if(calc.is_binaryexpr(right)):
-        right = eval_binary(right,variables)
+    right = eval_expression(right)
 
     operator = calc.condition_operator(expression)
     
@@ -52,9 +48,9 @@ def eval_condition(expression : list, variables : dict) -> bool:
 def eval_binary(expression : list, variables : dict) -> bool:
     # [[5, +, 5], + ,5]
     #Vi vet att det är ett binary expression, dvs att operatorn är en binary operator, det kommer alltså alltid att returneras något av följande
-    left = calc_expression(calc.binaryexpr_left(expression),variables)
+    left = eval_expression(calc.binaryexpr_left(expression),variables)
  
-    right = calc_expression(calc.binaryexpr_right(expression),variables)
+    right = eval_expression(calc.binaryexpr_right(expression),variables)
 
     
     operator = calc.binaryexpr_operator(expression)
@@ -108,6 +104,7 @@ def exec_statement(statement : list, variables : dict):
     elif(calc.is_assignment(statement)):
         copy_variables = exec_assignment(statement,copy_variables)
 
+    #Repetition
     elif(calc.is_repetition(statement)):
 
         loop_condition = calc.repetition_condition(statement)
@@ -118,20 +115,22 @@ def exec_statement(statement : list, variables : dict):
 
 
     elif(calc.is_output(statement)):
-        expression = calc_expression(calc.output_expression(statement),copy_variables)
+        expression = eval_expression(calc.output_expression(statement),copy_variables)
         print(expression)
     
 
     elif(calc.is_input(statement)):
-       #Numeriskt värde m.h.a input()
-       expression = calc.input_variable(statement)
+        #Numeriskt värde m.h.a input()
+        variable = calc.input_variable(statement)
 
-       try:
-           user_input = int(input("Enter a numerical value"))
-           
-       except TypeError:
-           pass
-        #Throw error
+        try:
+            user_input = int(input("Enter a numerical value: "))
+
+            copy_variables[variable] = user_input
+
+        except TypeError:
+            pass
+            #Throw error
 
 
     return copy_variables
@@ -142,8 +141,9 @@ def exec_assignment(statement : list, variables : dir):
     variables_copy = copy.deepcopy(variables)
 
     variable = calc.assignment_variable(statement)
-    value = calc_expression(calc.assignment_expression(statement),variables)
+    value = eval_expression(calc.assignment_expression(statement),variables)
 
+    #Kolla om det är ett numeriskt värde?
     if(calc.is_constant(value)):
         variables_copy[variable] = value
     
@@ -153,23 +153,29 @@ def exec_assignment(statement : list, variables : dir):
 
     return variables_copy
 
-def calc_expression(expression : list, variables : dict):
+def eval_expression(expression : list, variables : dict):
     if(calc.is_binaryexpr(expression)):
         return eval_binary(expression,variables)
     
     elif(calc.is_variable(expression)):
-        #Exception
-        return variables[expression]
+        return eval_variable(expression,variables)
 
     elif(calc.is_constant(expression)):
-        return expression
+        return eval_constant(expression)
 
     else:
         pass
         #Throw error
 
+def eval_constant(expression):
+    return expression
 
-
+def eval_variable(expression,variables):
+    if(expression in variables.keys()):
+        return variables[expression]
+    else:
+        #Throw error?
+        pass
 
 #exec_program(['calc', ['if', [6, '>', 5], ['print', 2], ['print', 4]]])
 
