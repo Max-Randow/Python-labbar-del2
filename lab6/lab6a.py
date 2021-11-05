@@ -24,7 +24,7 @@ def exec_statements(statements : list, variables : dict):
     
 
 def eval_condition(expression : list, variables : dict) -> bool:
-
+    """Fixa calc_expression"""
     #Vi vet att det är ett condition, dvs att operatorn är en condoper, det kommer alltså alltid att returneras något av följande
     left = calc.condition_left(expression)
 
@@ -121,11 +121,18 @@ def exec_statement(statement : list, variables : dict):
        #Numeriskt värde m.h.a input()
        expression = calc.input_variable(statement)
 
+       try:
+           user_input = int(input("Enter a numerical value"))
+           
+       except TypeError:
+           pass
+        #Throw error
+
 
     return copy_variables
 
 
-def exec_assignment(statement : list,variables : dir):
+def exec_assignment(statement : list, variables : dir):
     #Använd dictionary
     variables_copy = copy.deepcopy(variables)
 
@@ -146,9 +153,10 @@ def calc_expression(expression : list, variables : dict):
         return eval_binary(expression)
     
     elif(calc.is_variable(expression)):
+        #Exception
         return variables[expression]
 
-    elif(calc.calc.is_constant(expression)):
+    elif(calc.is_constant(expression)):
         return expression
 
     else:
