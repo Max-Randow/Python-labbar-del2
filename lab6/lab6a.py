@@ -30,13 +30,13 @@ def eval_condition(expression : list, variables : dict) -> bool:
 
     #Kolla om left är ett binary expression?
     if(calc.is_binaryexpr(left)):
-        left = eval_binary(left)
+        left = eval_binary(left,variables)
 
     right = calc.condition_right(expression)
 
     #Kolla om right är ett binary expression?
     if(calc.is_binaryexpr(right)):
-        right = eval_binary(right)
+        right = eval_binary(right,variables)
 
     operator = calc.condition_operator(expression)
     
@@ -85,19 +85,19 @@ def exec_statement(statement : list, variables : dict):
         #Kolla om det faktiskt är ett condition / binary expression, annars går det ju inte!
         if(calc.is_condition(condition)):
             #Kolla om expressionet är sant
-            evaluation = eval_condition(condition)
+            evaluation = eval_condition(condition,copy_variables)
 
             #Om conditionet / binary expr. stämmer så hämtar vi true branchen annars false branchen.
             if(evaluation):
                 #True Branch!
                 true_branch = calc.selection_true_branch(statement)
                 #True branch kan vara ett till statement Typ som [set, 'a', 7], rekurera
-                exec_statement(true_branch)
+                exec_statement(true_branch,copy_variables)
             else:
                 #False Branch!
                 false_branch = calc.selection_false_branch(statement)
                 #False branch kan vara ett till statement Typ som [set, 'a', 7], rekurera
-                exec_statement(false_branch)  
+                exec_statement(false_branch,copy_variables)  
     
         else:
             #Kasta error!
@@ -113,7 +113,7 @@ def exec_statement(statement : list, variables : dict):
     
 
     elif(calc.is_output(statement)):
-        expression = calc.output_expression(statement)
+        expression = calc_expression(calc.output_expression(statement),copy_variables)
         print(expression)
     
 
@@ -150,7 +150,7 @@ def exec_assignment(statement : list, variables : dir):
 
 def calc_expression(expression : list, variables : dict):
     if(calc.is_binaryexpr(expression)):
-        return eval_binary(expression)
+        return eval_binary(expression,variables)
     
     elif(calc.is_variable(expression)):
         #Exception
@@ -165,4 +165,6 @@ def calc_expression(expression : list, variables : dict):
 
 #exec_program(['calc', ['if', [6, '>', 5], ['print', 2], ['print', 4]]])
 
-exec_program(['calc', ['if', [[5,"+",[5,"-",5]], '>', 5], ['print', 2], ['print', 4]]])
+#exec_program(['calc', ['if', [[5,"+",[5,"-",5]], '>', 5], ['print', 2], ['print', 4]]])
+
+exec_program(['calc',["set","a",7], ["print","a"]])
