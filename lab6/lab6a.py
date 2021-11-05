@@ -94,10 +94,12 @@ def exec_statement(statement : list, variables : dict):
                 #True branch kan vara ett till statement Typ som [set, 'a', 7], rekurera
                 exec_statement(true_branch,copy_variables)
             else:
-                #False Branch!
-                false_branch = calc.selection_false_branch(statement)
-                #False branch kan vara ett till statement Typ som [set, 'a', 7], rekurera
-                exec_statement(false_branch,copy_variables)  
+
+                if(calc.selection_has_false_branch(statement)):
+                    #False Branch!
+                    false_branch = calc.selection_false_branch(statement)
+                    #False branch kan vara ett till statement Typ som [set, 'a', 7], rekurera
+                    exec_statement(false_branch,copy_variables)  
     
         else:
             #Kasta error!
@@ -184,7 +186,18 @@ def eval_variable(expression,variables):
 
 #exec_program(['calc', ['if', [6, '>', 5], ['print', 2], ['print', 4]]])
 
-exec_program(['calc', ['if', [[5,"+",[5,"-",5]], '>', 5], ['print', 2], ['print', 4]]])
+#exec_program(['calc', ['if', [[5,"+",[5,"-",5]], '>', 5], ['print', 2], ['print', 4]]])
 
 #exec_program(['calc',["set","n",7], ["while", [14,">","n"],
              #["set","n",["n","+",1]],["print","n"]]])
+
+exec_program([
+        "calc",
+        ["read", "x"],
+        ["set", "zero", 0],
+        ["set", "pos", 1],
+        ["set", "nonpos", -1],
+        ["if", ["x", "=", 0], ["print", "zero"]],
+        ["if", ["x", ">", 0], ["print", "pos"]],
+        ["if", ["x", "<", 0], ["print", "nonpos"]],
+    ])
