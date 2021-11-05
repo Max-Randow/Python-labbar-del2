@@ -109,8 +109,13 @@ def exec_statement(statement : list, variables : dict):
         copy_variables = exec_assignment(statement,copy_variables)
 
     elif(calc.is_repetition(statement)):
-        pass
-    
+
+        loop_condition = calc.repetition_condition(statement)
+        loop_statements = calc.repetition_statements(statement)
+        
+        while eval_condition(loop_condition,copy_variables):
+            exec_statements(loop_statements)
+
 
     elif(calc.is_output(statement)):
         expression = calc_expression(calc.output_expression(statement),copy_variables)
@@ -163,8 +168,12 @@ def calc_expression(expression : list, variables : dict):
         pass
         #Throw error
 
+
+
+
 #exec_program(['calc', ['if', [6, '>', 5], ['print', 2], ['print', 4]]])
 
 #exec_program(['calc', ['if', [[5,"+",[5,"-",5]], '>', 5], ['print', 2], ['print', 4]]])
 
-exec_program(['calc',["set","a",7], ["print","a"]])
+exec_program(['calc',["set","n",7], ["while", [14,">","n"],
+             ["set","n",["n","+",1]]]])
