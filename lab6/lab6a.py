@@ -21,18 +21,22 @@ def exec_statements(statements : list, variables : dict):
 
         copy_variables = exec_statement(first, copy_variables)
         exec_statements(rest,copy_variables)
-    
+        #Yolo lösning till while loopar
+        return copy_variables
+    else:
+        pass
+        #kasta error
 
 def eval_condition(expression : list, variables : dict) -> bool:
     """Fixa calc_expression"""
     #Vi vet att det är ett condition, dvs att operatorn är en condoper, det kommer alltså alltid att returneras något av följande
     left = calc.condition_left(expression)
 
-    left = eval_expression(left)
+    left = eval_expression(left,variables)
 
     right = calc.condition_right(expression)
 
-    right = eval_expression(right)
+    right = eval_expression(right,variables)
 
     operator = calc.condition_operator(expression)
     
@@ -111,7 +115,7 @@ def exec_statement(statement : list, variables : dict):
         loop_statements = calc.repetition_statements(statement)
         
         while eval_condition(loop_condition,copy_variables):
-            exec_statements(loop_statements)
+            copy_variables = exec_statements(loop_statements, copy_variables)
 
 
     elif(calc.is_output(statement)):
@@ -167,6 +171,7 @@ def eval_expression(expression : list, variables : dict):
         pass
         #Throw error
 
+
 def eval_constant(expression):
     return expression
 
@@ -179,7 +184,7 @@ def eval_variable(expression,variables):
 
 #exec_program(['calc', ['if', [6, '>', 5], ['print', 2], ['print', 4]]])
 
-#exec_program(['calc', ['if', [[5,"+",[5,"-",5]], '>', 5], ['print', 2], ['print', 4]]])
+exec_program(['calc', ['if', [[5,"+",[5,"-",5]], '>', 5], ['print', 2], ['print', 4]]])
 
-exec_program(['calc',["set","n",7], ["while", [14,">","n"],
-             ["set","n",["n","+",1]]]])
+#exec_program(['calc',["set","n",7], ["while", [14,">","n"],
+             #["set","n",["n","+",1]],["print","n"]]])
