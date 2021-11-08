@@ -1,5 +1,4 @@
 #-- Imports --
-from types import TracebackType
 import calc
 import copy
 
@@ -243,7 +242,7 @@ def eval_expression(expression : list, variables : dict):
     #If none of the above worked, throw an error as it isn't an expression
     raise TypeError("The expression of type list is not an expression")
 
-def eval_constant(expression):
+def eval_constant(expression : str):
     """Returns the value of the constant"""
     return expression
 
