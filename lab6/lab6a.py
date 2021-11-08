@@ -5,9 +5,12 @@ import copy
 #-- Main functions --
 """These functions are the core to the program. These functions call sub-functions called "Statement functions" and "Evaluation functions". """
 
-def exec_program(args : list, variables = {}) -> dict: 
+def exec_program(args : list, variables = None) -> dict: 
     """Runs a ConstCalc program, args. You can also use your own premade variables with the second parameter."""
 
+    if(variables == None):
+        #This only changes the "memory slot" that the variable is pointing to, thus not destructive.
+        variables = {}
     #We know that it's a program as the first element is "calc"
     if(calc.is_program(args)):
         
@@ -21,9 +24,6 @@ def exec_program(args : list, variables = {}) -> dict:
 def exec_statements(statements : list, variables : dict) -> dict:
     """Execute the statements of the program, returns a (maybe) modified dictionary"""
 
-    #Create a copy of the variables in order to avoid a destructable function
-    copy_variables = copy.deepcopy(variables)
-
     #If there are any statements left in statements, go through them recursively
     if(not calc.empty_statements(statements)):
 
@@ -32,40 +32,38 @@ def exec_statements(statements : list, variables : dict) -> dict:
         rest = calc.rest_statements(statements)
 
         #Go through the first statement and re-run the function with the rest.
-        copy_variables = exec_statement(first, copy_variables)
-        return exec_statements(rest, copy_variables)
+        variables = exec_statement(first, variables)
+        return exec_statements(rest, variables)
 
     #There are no statements left, return the variables
-    return copy_variables
+    return variables
 
 def exec_statement(statement : list, variables : dict) -> dict:
     """Executes a statement no matter what type it is, returns a (maybe) modified dictionary"""
-    #Make a copy in order to avoid a destructable function
-    copy_variables = copy.deepcopy(variables)
-
+ 
     #Here we have distributed the code throughout multiple functions in order to make the code more readable.
 
     #Selection
     if(calc.is_selection(statement)):
-        copy_variables = exec_selection(statement,copy_variables)
+        variables = exec_selection(statement,variables)
   
     #Assignment
     elif(calc.is_assignment(statement)):
-        copy_variables = exec_assignment(statement,copy_variables)
+        variables = exec_assignment(statement,variables)
 
     #Repetition
     elif(calc.is_repetition(statement)):
-        copy_variables = exec_repetition(statement,copy_variables)
+        variables = exec_repetition(statement,variables)
     #Output
     elif(calc.is_output(statement)):
-        exec_output(statement,copy_variables)
+        exec_output(statement,variables)
     
     #Input
     elif(calc.is_input(statement)):
-        copy_variables = exec_input(statement,copy_variables)
+        variables = exec_input(statement,variables)
    
     #Return the (maybe) modified copy
-    return copy_variables
+    return variables
 
 
 #-- Execute statement functions ()
@@ -74,19 +72,18 @@ def exec_statement(statement : list, variables : dict) -> dict:
 
 def exec_repetition(statement : list, variables : dict) -> dict:
     """Executes a repetition statement and returns a (maybe) modified dictionary"""
-    #Make a copy of the dictionary so that the function is not destructive
-    copy_variables = copy.deepcopy(variables)
+    
     #Grab the condition and the statements from the current statement
     loop_condition = calc.repetition_condition(statement)
     loop_statements = calc.repetition_statements(statement)
     
     #While the condition is true, execute the loop_statements
-    while eval_condition(loop_condition,copy_variables):
+    while eval_condition(loop_condition,variables):
         
         #Return the new copy_variables
-        copy_variables = exec_statements(loop_statements, copy_variables)
+        variables = exec_statements(loop_statements, variables)
 
-    return copy_variables
+    return variables
 
 def exec_selection(statement : list,variables : dict) -> dict:
     """Executes a selection statement and returns a (maybe) modified dictionary"""
@@ -149,6 +146,7 @@ def exec_input(statement : list,variables : dict) -> dict:
 
 def exec_output(statement : list,variables : dict):
     """Executes an output statement and does not return anything"""
+
     #Grab the output_expression, which we will use if and only if it's a variable.
     output_expression = calc.output_expression(statement)
     expression = eval_expression(output_expression,variables)
