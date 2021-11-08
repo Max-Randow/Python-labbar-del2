@@ -1,4 +1,5 @@
 #-- Imports --
+from types import TracebackType
 import calc
 import copy
 
@@ -6,7 +7,7 @@ import copy
 """These functions are the core to the program. These functions call sub-functions called "Statement functions" and "Evaluation functions". """
 
 def exec_program(args : list, variables = None) -> dict: 
-    """Runs a ConstCalc program, args. You can also use your own premade variables with the second parameter."""
+    """Runs a Calc program, args. You can also use your own premade variables with the second parameter."""
 
     if(variables == None):
         #This only changes the "memory slot" that the variable is pointing to, thus not destructive.
@@ -114,8 +115,7 @@ def exec_selection(statement : list,variables : dict) -> dict:
                 return exec_statement(false_branch,variables)  
 
     else:
-        #Kasta error!
-        pass
+        raise TypeError("The condition provided in the selection is not an actual condition")
     
     #Return the  (maybe) modified copy_variables
     return variables
@@ -140,9 +140,10 @@ def exec_input(statement : list,variables : dict) -> dict:
         #Return the modified dictionary.
         return copy_variables
 
+    #Throw error if the datatype is not correct
     except TypeError:
-        pass
-        #Throw error
+        print("The input provided by the user was not an integer")
+        
 
 def exec_output(statement : list,variables : dict):
     """Executes an output statement and does not return anything"""
@@ -173,7 +174,7 @@ def exec_assignment(statement : list, variables : dict) -> dict:
         return variables_copy
 
     #Throw error
-
+    raise TypeError("Not a constant")
 
 #-- Evaluate functions --
 
@@ -240,21 +241,25 @@ def eval_expression(expression : list, variables : dict):
         return eval_constant(expression)
 
     #If none of the above worked, throw an error as it isn't an expression
-    #Throw error
+    raise TypeError("The expression of type list is not an expression")
 
 def eval_constant(expression):
     """Returns the value of the constant"""
     return expression
 
-def eval_variable(expression,variables):
+def eval_variable(expression : str,variables : dict):
     """Returns the variable's value"""
-    #Look up so that the variable in fact is in the dictionary before grabbing it's value.
-    if(expression in variables.keys()):
-        return variables[expression]
-
+    
+    try:
+        #Look up so that the variable in fact is in the dictionary before grabbing it's value.
+        if(expression in variables.keys()):
+            return variables[expression]
+    
     #If it's not in the dictionary, throw an error.
-    #Throw error
+    except KeyError:
+        print(f"Key does not exist in {variables}")
 
+    
 
 #-- Code to run the program --
 
@@ -265,9 +270,10 @@ def eval_variable(expression,variables):
 """print(exec_program(['calc',["set","n",7], ["while", ["n",">",5],
            ["set","n",["n","-",1]],["print","n"]]]))"""
 
-"""print(exec_program([
+print(exec_program([
         "calc",
         ["read", "x"],
         ["if", ["x", ">", 0], ["set", "a", 1], ["set", "a", -1]],
         ["if", ["x", "=", 0], ["set", "a", 0]],
-    ]))"""
+    ]))
+
