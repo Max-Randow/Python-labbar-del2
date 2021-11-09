@@ -128,20 +128,25 @@ def exec_input(statement : list,variables : dict) -> dict:
     #Grab the variable that is to be modified
     variable = calc.input_variable(statement)
     
-    #If the input is not an int, throw an error (Should floats be allowed too?)
+    #If the input is not a number (float or int), throw an error
     try:
         #Get the user input
-        user_input = int(input("Enter value for " + variable + ": "))
+        
+        user_input = input("Enter value for " + variable + ": ")
         
         #Update the dictionary
-        copy_variables[variable] = user_input
+        if('.' in user_input):
+            copy_variables[variable] = float(user_input)
+
+        else:
+            copy_variables[variable] = int(user_input)
 
         #Return the modified dictionary.
         return copy_variables
 
     #Throw error if the datatype is not correct
-    except TypeError:
-        print("The input provided by the user was not an integer")
+    except ValueError:
+        raise TypeError("The input provided by the user was not a number")
         
 
 def exec_output(statement : list,variables : dict):
@@ -159,6 +164,7 @@ def exec_output(statement : list,variables : dict):
 
 def exec_assignment(statement : list, variables : dict) -> dict:
     """Executes an assignment statement and returns a modified dictionary"""
+
     #Create a copy in order to avoid the function from being destructive
     variables_copy = copy.deepcopy(variables)
 
@@ -181,27 +187,30 @@ def exec_assignment(statement : list, variables : dict) -> dict:
 
 def eval_condition(expression : list, variables : dict) -> bool:
     """When we know that it in fact is a condition we can calculate it's value with this function"""
+    try:
+        #Grab the left side of the expression and get it's "true" value
+        left = calc.condition_left(expression)
+        left = eval_expression(left,variables)
 
-    #Grab the left side of the expression and get it's "true" value
-    left = calc.condition_left(expression)
-    left = eval_expression(left,variables)
+        #Grab the right side of the expression and get it's "true" value
+        right = calc.condition_right(expression)
+        right = eval_expression(right,variables)
 
-    #Grab the right side of the expression and get it's "true" value
-    right = calc.condition_right(expression)
-    right = eval_expression(right,variables)
+        #Get the operator
+        operator = calc.condition_operator(expression)
+       
+        #Return a different value depending on the operator
+        if(operator == "<"):
+            return left < right
 
-    #Get the operator
-    operator = calc.condition_operator(expression)
-    
-    #Return a different value depending on the operator
-    if(operator == "<"):
-        return left < right
+        elif(operator == ">"):
+            return left > right
 
-    elif(operator == ">"):
-        return left > right
-
-    else:
-        return left == right
+        else:
+            return left == right
+            
+    except(TypeError):
+        raise TypeError("The condition does not contain the correct datatypes/operators")
 
 def eval_binary(expression : list, variables : dict) -> bool:
     """When we know that it's a binary expression, we can use this function to calculate it's value"""
@@ -260,7 +269,7 @@ def eval_variable(expression : str,variables : dict):
 
     
 
-#-- Code to run the program --
+#-- Code to run the program --#
 
 #exec_program(['calc', ['if', [6, '>', 5], ['print', 2], ['print', 4]]])
 
@@ -273,6 +282,37 @@ print(exec_program([
         "calc",
         ["read", "x"],
         ["if", ["x", ">", 0], ["set", "a", 1], ["set", "a", -1]],
-        ["if", ["x", "=", 0], ["set", "a", 0]],
+        ["if", ["x", "=", 0], ["set", "a", 1.5]],
     ]))
 
+
+"""print(exec_program([
+    "calc",
+    ["read", "n"],
+    ["set", "sum", 1],
+    [
+        "while",
+        [["n", "-", 1], ">", 0],
+        ["set", "sum", ["sum", "*", "n"]],
+        ["set", "n", ["n", "-", 1]],
+    ],
+    ["print", "sum"],
+]))"""
+
+#-- Error code --#
+"""print(exec_program([
+        "calc",
+        ["read", "x"],
+        ["if", ["he", ">", 0], ["set", "a", 1], ["set", "a", -1]],
+        ["if", ["x", "=", 0], ["set", "a", 0]],
+    ]))"""
+
+
+"""print(exec_program([
+        "calc",
+        ["set", "x", 5],
+        ["if", [[5,"%",5], "=", 5], ["set", "a", 1], ["set", "a", -1]],
+        ["if", ["x", "=", 0], ["set", "a", 0]],
+    ]))"""
+
+    
