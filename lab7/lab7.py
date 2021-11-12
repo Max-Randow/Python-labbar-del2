@@ -32,12 +32,12 @@ print(deep_match([[["hej1","hej2"],["hej2",["hej3"]]]],
 def search(pattern : list, db : list):
     """Seatch for a pattern in a database"""
     if(not db):
-        return False
+        return []
 
     if(not deep_match(db[0],pattern)):
         return search(pattern,db[1:])
 
-    return db[0]
+    return db[0] + search(pattern,db[1:])
 
-print(search(['--', ['titel', ['&', '&']], '--'], db))
+print(search([['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']], db))
 #Deluppgift 2 - Sök i databas
