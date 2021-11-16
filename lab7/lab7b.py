@@ -3,14 +3,8 @@
 def is_empty_tree(tree):
     return isinstance(tree, list) and not tree
 
-
 def is_leaf(tree):
     return isinstance(tree, int)
-
-
-def create_tree(left_tree, key, right_tree):
-    return [left_tree, key, right_tree]
-
 	
 def left_subtree(tree):
     return tree[0]
@@ -19,38 +13,7 @@ def left_subtree(tree):
 def right_subtree(tree):
     return tree[2]
 
-
-#Deluppgift 1
-def traverse(tree):
-    "Traverse a tree"
-
-    if(is_empty_tree(tree)):
-        return tree
-
-    #Lista ut mitten
-    root = tree[1]
-    
-    #Get subtrees / leafs
-    left = left_subtree(tree)
-    right = right_subtree(tree)
-    
-    is_left_leaf = is_leaf(left)
-    is_right_leaf = is_leaf(right)
-
-    if not is_left_leaf and not is_right_leaf:
-        return traverse(left) + traverse(right)
-    if not is_left_leaf:
-        return traverse(left) + right
-    if not is_right_leaf:
-        return traverse(right) + left
-    else:
-        return left + right
-
-
-
-#Deluppgift 2 
-
-#Test funktioner
+#Pred funktioner
 def pred_empty():
     return 0
 
@@ -62,16 +25,21 @@ def pred_node(key, left_value, right_value):
 
 
 def traverse(tree,node_fn,leaf_fn,empty_fn):
-    "Traverse a tree"
+    """Traverse a tree with predicates
+    ::param:: tree is a binary tree
+    ::param:: node_fn contains the parameters key,left_value,right_value
+    ::param:: leaf_fn contains the parameter key
+    ::param:: empty_fn contains no parameters
+    """
 
+    #Base cases
     if(is_empty_tree(tree)):
         return empty_fn()
 
     if(is_leaf(tree)):
-        print(is_leaf(tree))
         return leaf_fn(tree)
 
-    #Lista ut mitten
+    #Get the node
     node = tree[1]
     
     #Get subtrees / leafs
@@ -80,15 +48,12 @@ def traverse(tree,node_fn,leaf_fn,empty_fn):
 
     return node_fn(node,traverse(left,node_fn,leaf_fn,empty_fn),traverse(right,node_fn,leaf_fn,empty_fn))
     
-    
 
-#print(traverse([6, 7, 8],inner_node_fn,leaf_fn,empty_tree_fn))
-"""
+
 def contains_key(key, tree):
 
     def node_fn(node,left,right):
-        print((node == key) or left or right)
-        return left or right
+        return (node == key) or left or right
 
     def leaf_fn(leaf):
         return leaf == key 
@@ -96,7 +61,6 @@ def contains_key(key, tree):
     def empty_fn():
         return False
 
-    #Använder bool funktionen då det kan bli 1 eller 0 ibland
-    return traverse(tree,node_fn,leaf_fn,empty_fn)"""
+    return traverse(tree,node_fn,leaf_fn,empty_fn)
 
-print(traverse([6,7,8],pred_node,pred_leaf,pred_empty))
+#print(contains_key(7,[3,6,[7,6,3]]))
