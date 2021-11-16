@@ -278,14 +278,14 @@ def eval_variable(expression : str,variables : dict):
 """print(exec_program(['calc',["set","n",7], ["while", ["n",">",5],
            ["set","n",["n","-",1]],["print","n"]]]))"""
 
-print(exec_program([
+"""print(exec_program([
         "calc",
         ["read", "x"],
         ["if", ["x", ">", 0], ["set", "a", 1], ["set", "a", -1]],
         ["if", ["x", "=", 0], ["set", "a", 1.5]],
-    ]))
+    ]))"""
 
-
+print(exec_program(["calc",["set","n",True],["print","n"]]))
 """print(exec_program([
     "calc",
     ["read", "n"],

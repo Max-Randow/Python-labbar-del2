@@ -24,13 +24,11 @@ def deep_match(seq : list, pattern : list):
         return deep_match(seq[0],pattern[0]) and deep_match(seq[1:],pattern[1:])
     else:
         return False
-"""
-print(deep_match([[["hej1","hej2"],["hej2",["hej3"]]]],
-                 [["--",["hej2",["&"]]]])) 
-"""
+
+#Deluppgift 2 - Sök i databas
 
 def search(pattern : list, db : list):
-    """Seatch for a pattern in a database"""
+    """Search for a pattern in a database"""
     if(not db):
         return []
 
@@ -39,5 +37,10 @@ def search(pattern : list, db : list):
 
     return db[0] + search(pattern,db[1:])
 
-print(search([['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']], db))
-#Deluppgift 2 - Sök i databas
+
+assert(search(["--",["år",2009],"--"],db)) == [['författare', ['john', 'zelle']], ['titel', ['data', 'structures', 'and', 'algorithms', 'using', 'python', 'and', 'c++']], ['år', 2009]]
+assert(search(["--", ["titel", ["programmering", "i", "lisp"]], "--"],db)) == [['författare', ['anders', 'haraldsson']],['titel', ['programmering', 'i', 'lisp']],['år', 1993]]
+assert(search(["--", ["titel", ['data', 'structures', 'and', 'algorithms', 'using', 'python', 'and', 'c++']], "&","hej"],db)) == []
+
+#print(search([['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']], db))
+
