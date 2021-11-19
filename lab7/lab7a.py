@@ -32,15 +32,17 @@ def search(pattern : list, db : list):
     if(not db):
         return []
 
-    if(not deep_match(db[0],pattern)):
+    if(not deep_match(db[0],pattern) ):
         return search(pattern,db[1:])
 
     return db[0] + search(pattern,db[1:])
 
+def test():
+    assert(search(["--",["år",2009],"--"],db)) == [['författare', ['john', 'zelle']], ['titel', ['data', 'structures', 'and', 'algorithms', 'using', 'python', 'and', 'c++']], ['år', 2009]]
+    assert(search(["--", ["titel", ["programmering", "i", "lisp"]], "--"],db)) == [['författare', ['anders', 'haraldsson']],['titel', ['programmering', 'i', 'lisp']],['år', 1993]]
+    assert(search(["--", ["titel", ['data', 'structures', 'and', 'algorithms', 'using', 'python', 'and', 'c++']], "&","hej"],db)) == []
 
-assert(search(["--",["år",2009],"--"],db)) == [['författare', ['john', 'zelle']], ['titel', ['data', 'structures', 'and', 'algorithms', 'using', 'python', 'and', 'c++']], ['år', 2009]]
-assert(search(["--", ["titel", ["programmering", "i", "lisp"]], "--"],db)) == [['författare', ['anders', 'haraldsson']],['titel', ['programmering', 'i', 'lisp']],['år', 1993]]
-assert(search(["--", ["titel", ['data', 'structures', 'and', 'algorithms', 'using', 'python', 'and', 'c++']], "&","hej"],db)) == []
+    print("Passed all tests!")
 
-#print(search([['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']], db))
+test()
 
