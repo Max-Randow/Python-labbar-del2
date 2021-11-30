@@ -1,4 +1,9 @@
-from cal_ui import *
+#Imports
+from cal_abstraction import *
+#Book uses these as well.
+from cal_ui import get_calendar,insert_calendar
+#(For testing code)
+from cal_ui import * 
 # Write your code for lab 8C (remove) here.
 
 def remove(calendarName : str, day : int, month  : str, start_time):
