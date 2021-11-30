@@ -6,7 +6,7 @@ from cal_ui import get_calendar,insert_calendar
 from cal_ui import * 
 # Write your code for lab 8C (remove) here.
 
-def remove(calendarName : str, day : int, month  : str, start_time):
+def remove(calendarName : str, day : int, month  : str, start_time : str):
     """Removes an appointment from an existing calendar."""
     
     #Turn the parameters into our data types.
@@ -40,6 +40,7 @@ def remove(calendarName : str, day : int, month  : str, start_time):
         print("There is no appointment to remove.")
     
 def get_appointment(day : CalendarDay, start : Time) -> Appointment:
+    """Returns an appointment, given the day and start time"""
     #Ensure the correct types.
     ensure_type(day,CalendarDay)
     ensure_type(start,Time)
@@ -51,6 +52,7 @@ def get_appointment(day : CalendarDay, start : Time) -> Appointment:
             return app
 
 def cd_remove_appointment(cal_day : CalendarDay, app : Appointment) -> CalendarDay:
+    """Removes an appointment and returns the new modified CalendarDay"""
     ensure_type(cal_day,CalendarDay)
     ensure_type(app,Appointment)
 
