@@ -15,7 +15,7 @@ TimeSpanSeq = NamedTuple("TimeSpanSeq", [("sequences",List[TimeSpan])])
 # Implement these functions!  Also determine if you need *additional* functions.
 
 def new_time_span_seq(sequences : List[TimeSpan] = None) -> TimeSpanSeq:
-    """Create a new TimeSpanSeq"""
+    """Creates a new TimeSpanSeq"""
     if sequences is None:
         sequences = []
     else:
