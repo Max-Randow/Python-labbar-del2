@@ -4,7 +4,7 @@
 # Define the type somehow...  The initial "" is simply here as a placeholder.
 from typing import NamedTuple,List
 import copy
-from cal_abstraction import CalendarDay, Time, TimeSpan, ensure_type, new_time_span,Hour,Minute
+from cal_abstraction import *
 
 TimeSpanSeq = NamedTuple("TimeSpanSeq", [("sequences",List[TimeSpan])])
 
@@ -38,7 +38,8 @@ def tss_plus_span(time_span_seq, time_span):
     ensure_type(time_span_seq,TimeSpanSeq) and ensure_type(time_span,TimeSpan)
 
     tss.sequences.append(time_span)
-
+    #This is crazy
+    tss = new_time_span_seq(sorted(tss.sequences, key=lambda ts : hour_number(time_hour(ts_start(ts))) * 60 + minute_number(time_minute(ts_start(ts)))))
     return tss
 
 
@@ -70,7 +71,8 @@ def tss_keep_spans(tss, pred):
 
 
 #Test code
-tss = new_time_span_seq([new_time_span(Time(Hour(14),Minute(00)),Time(Hour(16),Minute(00)))])
+tss = new_time_span_seq([new_time_span(Time(Hour(21),Minute(00)),Time(Hour(22),Minute(00)))])
+tss = tss_plus_span(tss,new_time_span(Time(Hour(13),Minute(00)),Time(Hour(14),Minute(00))))
 print(tss_is_empty(tss))
 tss = tss_plus_span(tss,new_time_span(Time(Hour(15),Minute(00)),Time(Hour(17),Minute(00))))
 

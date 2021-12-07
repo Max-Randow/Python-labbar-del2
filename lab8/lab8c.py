@@ -3,7 +3,9 @@ from cal_abstraction import *
 #Book uses these as well.
 from cal_ui import get_calendar,insert_calendar
 #(For testing code)
-from cal_ui import * 
+from cal_ui import book,show,create 
+#In order to copy
+import copy
 # Write your code for lab 8C (remove) here.
 
 def remove(calendarName : str, day : int, month  : str, start_time : str):
@@ -35,12 +37,13 @@ def remove(calendarName : str, day : int, month  : str, start_time : str):
         insert_calendar(calendarName,new_cal_year)
 
         print("Appointment removed.")
+
     #Otherwise we want to tell the user that there is no appointment.
     else:
         print("There is no appointment to remove.")
     
-def get_appointment(day : CalendarDay, start : Time) -> Appointment:
-    """Returns an appointment, given the day and start time"""
+def get_appointment(day : CalendarDay, start : Time):
+    """Returns an appointment, given the day and start time."""
     #Ensure the correct types.
     ensure_type(day,CalendarDay)
     ensure_type(start,Time)
@@ -51,19 +54,23 @@ def get_appointment(day : CalendarDay, start : Time) -> Appointment:
             #We found it. We now return it as we can only have one appointment during this time.
             return app
 
+    #This can return None if nothing was found
+
 def cd_remove_appointment(cal_day : CalendarDay, app : Appointment) -> CalendarDay:
-    """Removes an appointment and returns the new modified CalendarDay"""
+    """Removes an appointment and returns the new modified CalendarDay."""
+    
     ensure_type(cal_day,CalendarDay)
     ensure_type(app,Appointment)
 
-    def remove_appointment(app : Appointment, apps : List[Appointment]):
+    def remove_appointment(apps : List[Appointment]):
         #Here we remove the Appointment (NOTE: 'Avbokningen får så klart ändra i lagringen av kalendrar' (according to the website))
-        apps.remove(app)
+        apps_copy = copy.deepcopy(apps)
+        apps_copy.remove(app)
 
-        return apps
+        return apps_copy
 
-    #We return a new CalendarDay (is not really necessary but it makes the code more readable)
-    return CalendarDay(cd_day(cal_day),remove_appointment(app,cal_day.appointments))
+    #Return a CalendarDay without the appointment that was to be removed.
+    return CalendarDay(cd_day(cal_day),remove_appointment(cal_day.appointments))
 
 
 

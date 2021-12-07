@@ -1,5 +1,5 @@
-USE_DEFAULT_DURATION_TYPE = True
-USE_DEFAULT_TIMESPAN_TYPE = True
+USE_DEFAULT_DURATION_TYPE = False
+USE_DEFAULT_TIMESPAN_TYPE = False
 
 # Used by the lab developers to test that the tests work for our
 # reference implementation.  If we have left this set to True,
