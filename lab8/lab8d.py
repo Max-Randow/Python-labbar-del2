@@ -17,4 +17,10 @@ else:
 
 
 def free_spans(cal_day: CalendarDay, start: Time, end: Time) -> TimeSpanSeq:
-    pass
+    
+    # Ensure correct types
+    ensure_type(cal_day, CelendarDay)
+    ensure_type(start, Time)
+    ensure_type(end, Time)
+
+

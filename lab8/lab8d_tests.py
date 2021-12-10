@@ -20,7 +20,28 @@ def create_tests_for_free_span() -> dict:
 
     # -------- YOUR TEST CASES GO HERE -----------------------
     # For each case, add a brief description of what you want to test.
+    store_test_case(
+            # Nothing is booked for the entire day
+            test_cases,
+            1,
+            start_str="00:00",
+            end_str="23:59",
+            booking_data=[],
+            exp_result=["00:00-23:59"]
+    
+    )
 
+    store_test_case(
+            # Just random times, and a 1 minute booking
+            test_cases,
+            1,
+            start_str="10:00",
+            end_str="18:35",
+            booking_data=["06:00-10:00", "10:00-12:30", "18:34-18:35"],
+            exp_result=["12:30-18:34"]
+    
+    )
+    
     print("Test cases generated.")
 
     return test_cases
