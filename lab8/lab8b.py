@@ -32,14 +32,19 @@ def tss_is_empty(time_span_seq : TimeSpanSeq) -> bool:
      
 
 
-def tss_plus_span(time_span_seq, time_span):
+def tss_plus_span(time_span_seq : TimeSpanSeq, time_span : TimeSpan):
     """Adds a TimeSpan to a TimeSpanSequence, returns a new TimeSpanSequence"""
     tss =  copy.deepcopy(time_span_seq)
     ensure_type(time_span_seq,TimeSpanSeq) and ensure_type(time_span,TimeSpan)
-
     tss.sequences.append(time_span)
-    #This is crazy
-    tss = new_time_span_seq(sorted(tss.sequences, key=lambda ts : hour_number(time_hour(ts_start(ts))) * 60 + minute_number(time_minute(ts_start(ts)))))
+
+    def ts_sort_key(ts):
+        #Convert to minutes
+        return hour_number(time_hour(ts_start(ts))) * 60 + \
+                           minute_number(time_minute(ts_start(ts)))
+
+    tss = new_time_span_seq(sorted(tss.sequences, key=ts_sort_key))
+
     return tss
 
 
@@ -70,11 +75,3 @@ def tss_keep_spans(tss, pred):
     return result
 
 
-#Test code
-#tss = new_time_span_seq([new_time_span(Time(Hour(21),Minute(00)),Time(Hour(22),Minute(00)))])
-#tss = tss_plus_span(tss,new_time_span(Time(Hour(13),Minute(00)),Time(Hour(14),Minute(00))))
-#print(tss_is_empty(tss))
-#tss = tss_plus_span(tss,new_time_span(Time(Hour(15),Minute(00)),Time(Hour(17),Minute(00))))
-
-
-#show_time_spans(tss)
