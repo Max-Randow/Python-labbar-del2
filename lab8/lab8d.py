@@ -19,8 +19,51 @@ else:
 def free_spans(cal_day: CalendarDay, start: Time, end: Time) -> TimeSpanSeq:
     
     # Ensure correct types
-    ensure_type(cal_day, CelendarDay)
+    ensure_type(cal_day, CalendarDay)
     ensure_type(start, Time)
     ensure_type(end, Time)
+    #Output TimeSpanSeq
+    output_list = new_time_span_seq()
+    #Convert to a TimeSpanSeq so it's sorted
+    converted_list = convert_to_tss(cal_day)
+    current = start
+
+    for ts in tss_iter_spans(convert_to_tss(cal_day)):
+        
+        # Kommer behöva hantera speciall fall senare
+        if time_precedes(current, ts_start(ts)):
+            output_list = tss_plus_span(output_list,
+                    new_time_span(current,ts_start(ts)))
+
+            if time_precedes(ts_end(ts), end) or ts_end(ts) == end:
+                current = ts_end(ts)
+                print(current)
+
+            else:
+                return output_list
+
+    if current != end:
+        output_list = tss_plus_span(output_list, new_time_span(current,end))
+
+    return output_list
+
+def convert_to_tss(cal_day: CalendarDay):
+    tss = new_time_span_seq()
+
+    for app in cd_iter_appointments(cal_day):
+                
+        ts = app_span(app)
+        tss = tss_plus_span(tss,ts)
+
+    return tss
+       
+
+cal_day = new_calendar_day(new_day(15),
+        [new_appointment(new_time_span(new_time(new_hour(16), new_minute(30)),
+            new_time(new_hour(18), new_minute(0))), new_subject("fuck you")), 
+        new_appointment(new_time_span(new_time(new_hour(13), new_minute(30)),
+            new_time(new_hour(15), new_minute(0))), new_subject("fuck you 2"))])
 
 
+print(free_spans(cal_day, new_time(new_hour(10),new_minute(0)),
+    new_time(new_hour(20), new_minute(0))))                

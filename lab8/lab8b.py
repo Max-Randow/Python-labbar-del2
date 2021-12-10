@@ -71,9 +71,10 @@ def tss_keep_spans(tss, pred):
 
 
 #Test code
-tss = new_time_span_seq([new_time_span(Time(Hour(21),Minute(00)),Time(Hour(22),Minute(00)))])
-tss = tss_plus_span(tss,new_time_span(Time(Hour(13),Minute(00)),Time(Hour(14),Minute(00))))
-print(tss_is_empty(tss))
-tss = tss_plus_span(tss,new_time_span(Time(Hour(15),Minute(00)),Time(Hour(17),Minute(00))))
+#tss = new_time_span_seq([new_time_span(Time(Hour(21),Minute(00)),Time(Hour(22),Minute(00)))])
+#tss = tss_plus_span(tss,new_time_span(Time(Hour(13),Minute(00)),Time(Hour(14),Minute(00))))
+#print(tss_is_empty(tss))
+#tss = tss_plus_span(tss,new_time_span(Time(Hour(15),Minute(00)),Time(Hour(17),Minute(00))))
 
-show_time_spans(tss)
+
+#show_time_spans(tss)
