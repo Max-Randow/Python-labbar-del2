@@ -30,7 +30,7 @@ def free_spans(cal_day: CalendarDay, start: Time, end: Time) -> TimeSpanSeq:
     for app in cd_iter_appointments(cal_day):
         ts = app_span(app)
 
-        if time_precedes_or_equals(current, ts_start(ts)):
+        if time_precedes_or_equals(current, ts_start(ts)) and time_precedes(ts_start(ts),end):
             #Current is before the appointment's start time.
             
             #Checks so that the two times are not equal and that the current time is after start
@@ -45,11 +45,11 @@ def free_spans(cal_day: CalendarDay, start: Time, end: Time) -> TimeSpanSeq:
                     return output_tss
                 #Otherwise add it like normal
                 output_tss = tss_plus_span(output_tss,new_time_span(current,ts_start(ts)))
-
+      
             #Set current to the end of the appointment
             current = ts_end(ts)
 
-
+    
     if time_precedes(current,end):
         output_tss = tss_plus_span(output_tss,new_time_span(current,end))
     
@@ -86,6 +86,4 @@ book("Jayne", 20, "sep", "15:00", "16:00", "Escape with loot")
 
 show("Jayne", 20, "sep")
 
-show("Jayne", 20, "sep")
-
-show_free("Jayne", 20,"sep","14:30","14:30")
+show_free("Jayne", 20,"sep","14:30","14:31")
