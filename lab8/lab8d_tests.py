@@ -32,6 +32,17 @@ def create_tests_for_free_span() -> dict:
     )
 
     store_test_case(
+            # Nothing is booked for the entire day
+            test_cases,
+            1,
+            start_str="00:00",
+            end_str="23:59",
+            booking_data=[],
+            exp_result=["00:00-23:59"]
+    
+    )
+
+    store_test_case(
             # Just random times, and a 1 minute booking
             test_cases,
             1,
@@ -39,6 +50,38 @@ def create_tests_for_free_span() -> dict:
             end_str="18:35",
             booking_data=["06:00-10:00", "10:00-12:30", "18:34-18:35"],
             exp_result=["12:30-18:34"]
+    
+    )
+
+    store_test_case(
+            # One minute bookings
+            test_cases,
+            1,
+            start_str="03:00",
+            end_str="03:01",
+            booking_data=["03:01-03:02","02:59-03:01"],
+            exp_result=["03:00-03:01"]
+    
+    )
+    store_test_case(
+            # Bookings over start and end.
+            test_cases,
+            1,
+            start_str="15:00",
+            end_str="18:00",
+            booking_data=["15:00-16:00","16:30-17:20","17:30-18:30"],
+            exp_result=["16:00-16:30","17:20-17:30"]
+    
+    )
+
+    store_test_case(
+            # Bookings over start and end.
+            test_cases,
+            1,
+            start_str="15:00",
+            end_str="19:00",
+            booking_data=["12:00-19:00"],
+            exp_result=[]
     
     )
     
