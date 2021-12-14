@@ -32,16 +32,9 @@ def free_spans(cal_day: CalendarDay, start: Time, end: Time) -> TimeSpanSeq:
         #If the app end is before current (|---|   |c), skip it
         if time_precedes_or_equals(ts_end(ts),current):
             continue
-        #If end is before or equal to current  ( |e     |c), break
-        if time_precedes_or_equals(end,current):
-            break
-        #If the app start is after the end (|e   |----| ), add a ts from current to end and break
-        if time_precedes_or_equals(end,ts_start(ts)):
-            output_tss = tss_plus_span(output_tss,new_time_span(current,end))
-            current = end
-            break
+        
         #If app start is before current and current is before the app end (|---|c---|), set current to app end
-        if time_precedes_or_equals(ts_start(ts), current) and time_precedes_or_equals(current,ts_end(ts)):
+        elif time_precedes_or_equals(ts_start(ts), current) and time_precedes_or_equals(current,ts_end(ts)):
             current = ts_end(ts)
         #We know that the app is between current and end (|c   |---|    |e)
         else:
@@ -88,4 +81,4 @@ book("Jayne", 20, "sep", "15:00", "16:00", "Escape with loot")
 
 show("Jayne", 20, "sep")
 
-show_free("Jayne", 20,"sep","14:30","14:40")
+show_free("Jayne", 20,"sep","11:59","17:59")
