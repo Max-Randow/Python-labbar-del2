@@ -84,6 +84,17 @@ def create_tests_for_free_span() -> dict:
             exp_result=[]
     
     )
+
+    store_test_case(
+            #All day. Can not handle "24:00" due to codebase.
+            test_cases,
+            1,
+            start_str="00:00",
+            end_str="23:59",
+            booking_data=["12:00-19:00"],
+            exp_result=["00:00-12:00","19:00-23:59"]
+    
+    )
     
     print("Test cases generated.")
 
