@@ -56,7 +56,6 @@ def tss_iter_spans(time_span_seq):
 
 
 def show_time_spans(time_span_seq):
-    #Is it okay to iterate here?
     """Outputs all the TimeSpans in TimeSpanSeq"""
     generator = tss_iter_spans(time_span_seq)
 
