@@ -29,6 +29,7 @@ def free_spans(cal_day: CalendarDay, start: Time, end: Time) -> TimeSpanSeq:
    
     for app in cd_iter_appointments(cal_day):
         ts = app_span(app)
+        
         #If the app end is before current (|---|   |c), skip it
         if time_precedes_or_equals(ts_end(ts),current):
             continue
@@ -69,16 +70,3 @@ def show_free(cal_name : str, day : int, month : str, start : str, end : str):
         print()
     
     
-#(For testing code)
-from cal_ui import book,show,create 
-
-#--- TEST CODE ----#
-create("Jayne")
-
-book("Jayne", 20, "sep", "12:00", "14:00", "Rob train")
-
-book("Jayne", 20, "sep", "15:00", "16:00", "Escape with loot")
-
-show("Jayne", 20, "sep")
-
-show_free("Jayne", 20,"sep","11:59","17:59")
